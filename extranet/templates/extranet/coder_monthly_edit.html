@@ -2,52 +2,68 @@
 {% load report_tags %}
 {% block content %}
 
-<table id="edit-hours">
-    <tr><th>
+<div class="table container" id="edit-hours">
+    <div class="row"><div class="col-xs-1"><label>
             project
-        </th><th>
+        </label></div><div class="col-xs-1"><label>
             date
-        </th><th>
+        </label></div><div class="col-xs-1"><label>
             start time
-        </th><th>
+        </label></div><div class="col-xs-1"><label>
             end time
-        </th><th>
+        </label></div><div class="col-xs-1"><label>
             hours
-        </th><th>
+        </label></div><div class="col-xs-1"><label>
             tags
-        </th><th>
+        </label></div><div class="col-xs-1"><label>
             repository
-        </th><th>
+        </label></div><div class="col-xs-1"><label>
             issue number
-        </th><th>
+        </label></div><div class="col-xs-1"><label>
             comment
-        </th><th>
+        </label></div><div class="col-xs-1"><label>
             billing month
-        </th><th>
+        </label></div><div class="col-xs-2"><label>
             actions
-    </th></tr>
+    </label></div></div>
     {% for row in coder_monthly.iter_hours %}
-    <tr><td>
+    <div class="row"><div class="col-xs-1">
             {{ row.project.name }}
-    </td><td>
-            {{ row.date|date:'Y-m-d' }}
-    </td><td>
-            {{ row.start_time|time:'H:i' }}
-    </td><td>
-            {{ row.end_time|time:'H:i' }}
-    </td><td>
+    </div><div class="col-xs-1">
+        <a href="#" id="date" class="editable" data-type="date" data-pk="{{ row.pk }}" data-url="/post"
+           data-title="Input date">
+
+        {{ row.date|date:'Y-m-d' }}
+        </a>
+    </div>
+        <div class="col-xs-1">
+            <a href="#" id="start_time" class="editable" data-type="text" data-pk="{{ row.pk }}" data-url="/post"
+               data-title="Input start time">
+                {{ row.start_time|time:'H:i' }}
+            </a>
+        </div>
+        <div class="col-xs-1">
+        <a href="#" id="end_time" class="editable" data-type="text" data-pk="{{row.pk}}" data-url="/post" data-title="Input end time">
+        {{ row.end_time|time:'H:i' }}
+        </a>
+    </div><div class="col-xs-1">
+        <a href="#" id="amount" class="editable" data-type="text" data-pk="{{row.pk}}" data-url="/post" data-title="Set hours">
             {{ row.amount }}
-    </td><td>
+        </a>
+    </div><div class="col-xs-1">
             {{ row.tags_string}}
-    </td><td>
+    </div><div class="col-xs-1">
             {{ row.repository.get_distinct_name }}
-    </td><td>
+    </div><div class="col-xs-1">
             {{ row.issue.number }}
-    </td><td class="comment">
+    </div><td class="comment">
+            <a href="#" id="comment" class="editable" data-type="text" data-pk="{{row.pk}}" data-url="/post" data-title="Input comment">
+
             {{ row.comment }}
-    </td><td>
+                </a>
+    </div><div class="col-xs-1">
             {{ row.coder_billing_month|default_if_none:'' }}
-    </td><td>
+    </div><div class="col-xs-1">
         {% if not selected or selected == row %}
             {% if not row.coder_billing_month and not row.project_billing_month %}
                 <form action="{% url 'extranet_coder_monthly_edit_row' coder_monthly.coder.user.username coder_monthly.year coder_monthly.month %}" method="{% if selected == row %}POST{% else %}GET{% endif %}">
@@ -58,9 +74,19 @@
                 </form>
             {% endif %}
         {% endif %}
-    </td></tr>
+    </div></div>
     {% endfor %}
-</table>
+</div>
+
+    <script type="application/javascript">
+
+        $.fn.editable.defaults.mode = 'popup';
+        $(document).ready(function() {
+            $('.editable').editable({
+                container: 'body'
+            });
+        });
+    </script>
 
 {% endblock content %}
 
@@ -88,3 +114,4 @@
     {{ coder_monthly.coder }}
 
 {% endblock page_title %}
+

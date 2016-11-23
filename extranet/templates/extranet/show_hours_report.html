@@ -142,7 +142,7 @@
                   <input type="hidden" name="do" value="start_again" />
                   <input type="hidden" name="hours_id" value="{{ hours.id }}" />
                   {% csrf_token %}
-                  <input type="submit" value="&#8987;" />
+                  <button type="submit"><span class="glyphicon glyphicon-hourglass"></span></button>
               </form>
           </td>
           {% endif %}
